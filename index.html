@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Animation Showcase</title>
+    <!-- Tailwind CSS for rapid, modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        canvas {
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+<!-- Header -->
+<header class="w-full border-b border-gray-800 bg-gray-950/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">AnimCraft Studio</h1>
+        </div>
+        <div class="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-900 border border-gray-800 text-gray-400 mono">
+            HTML5 Canvas &middot; Interactive
+        </div>
+    </div>
+</header>
+
+<!-- Main Content Area -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- Animation 1: Cat & Mouse -->
+    <section class="glass-panel rounded-2xl p-6 flex flex-col justify-between shadow-xl transition-all duration-300 hover:border-indigo-500/40">
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+                    01. Feline Pursuit
+                </h2>
+                <span class="text-xs text-gray-400 bg-gray-800/80 px-2.5 py-1 rounded-md">Circular Orbit</span>
+            </div>
+            <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                A watchful cat stationed at the center tracks a scurrying mouse moving in a continuous circular trajectory.
+            </p>
+            <div class="relative w-full aspect-square bg-gray-950/80 rounded-xl overflow-hidden border border-gray-800/80 shadow-inner">
+                <canvas id="catMouseCanvas" class="w-full h-full block"></canvas>
+            </div>
+        </div>
+        <div class="mt-6 flex items-center justify-between gap-3">
+            <button onclick="toggleAnimation('catMouse')" id="btn-catMouse" class="flex-1 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-sm font-medium py-2.5 px-4 rounded-xl transition shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path id="icon-catMouse" d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>
+                <span id="text-catMouse">Pause</span>
+            </button>
+            <button onclick="resetAnimation('catMouse')" class="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 active:scale-95 text-gray-300 text-sm font-medium rounded-xl transition border border-gray-700/50">
+                Reset
+            </button>
+        </div>
+    </section>
+
+    <!-- Animation 2: Car 360 Rotation -->
+    <section class="glass-panel rounded-2xl p-6 flex flex-col justify-between shadow-xl transition-all duration-300 hover:border-indigo-500/40">
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    02. 360° Car Spin
+                </h2>
+                <span class="text-xs text-gray-400 bg-gray-800/80 px-2.5 py-1 rounded-md">Dynamic Shadow</span>
+            </div>
+            <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                A sleek sports vehicle rotating around a central axis complete with dynamic ground shadows and speed trails.
+            </p>
+            <div class="relative w-full aspect-square bg-gray-950/80 rounded-xl overflow-hidden border border-gray-800/80 shadow-inner">
+                <canvas id="carCanvas" class="w-full h-full block"></canvas>
+            </div>
+        </div>
+        <div class="mt-6 flex items-center justify-between gap-3">
+            <button onclick="toggleAnimation('car')" id="btn-car" class="flex-1 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-sm font-medium py-2.5 px-4 rounded-xl transition shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path id="icon-car" d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>
+                <span id="text-car">Pause</span>
+            </button>
+            <button onclick="resetAnimation('car')" class="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 active:scale-95 text-gray-300 text-sm font-medium rounded-xl transition border border-gray-700/50">
+                Reset
+            </button>
+        </div>
+    </section>
+
+    <!-- Animation 3: Dramatic Human Monologue (Waist-Up / No Leg) -->
+    <section class="glass-panel rounded-2xl p-6 flex flex-col justify-between shadow-xl transition-all duration-300 hover:border-indigo-500/40">
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+                    03. Dramatic Monologue
+                </h2>
+                <span class="text-xs text-gray-400 bg-gray-800/80 px-2.5 py-1 rounded-md">Cinematic Drama</span>
+            </div>
+            <p class="text-sm text-gray-400 mb-4 leading-relaxed">
+                A human character seated from the waist up (legs out of frame), delivering an emotional conversation with hand gestures.
+            </p>
+            <div class="relative w-full aspect-square bg-gray-950/80 rounded-xl overflow-hidden border border-gray-800/80 shadow-inner">
+                <canvas id="aiCanvas" class="w-full h-full block"></canvas>
+            </div>
+        </div>
+        <div class="mt-6 flex items-center justify-between gap-3">
+            <button onclick="toggleAnimation('ai')" id="btn-ai" class="flex-1 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-sm font-medium py-2.5 px-4 rounded-xl transition shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path id="icon-ai" d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>
+                <span id="text-ai">Pause</span>
+            </button>
+            <button onclick="resetAnimation('ai')" class="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 active:scale-95 text-gray-300 text-sm font-medium rounded-xl transition border border-gray-700/50">
+                Reset
+            </button>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="w-full border-t border-gray-800/80 bg-gray-950/40 py-6 text-center text-xs text-gray-500">
+    Interactive Canvas Animations &middot; Built with vanilla JavaScript & Tailwind CSS
+</footer>
+
+<!-- Script implementing animations -->
+<script>
+    const animationStates = {
+        catMouse: { running: true, time: 0 },
+        car: { running: true, time: 0 },
+        ai: { running: true, time: 0 }
+    };
+
+    function toggleAnimation(key) {
+        animationStates[key].running = !animationStates[key].running;
+        const textEl = document.getElementById(`text-${key}`);
+        const iconPath = document.getElementById(`icon-${key}`);
+        
+        if (animationStates[key].running) {
+            textEl.innerText = 'Pause';
+            iconPath.setAttribute('d', 'M6 4h4v16H6V4zm8 0h4v16h-4V4z');
+        } else {
+            textEl.innerText = 'Play';
+            iconPath.setAttribute('d', 'M5 3l14 9-14 9V3z');
+        }
+    }
+
+    function resetAnimation(key) {
+        animationStates[key].time = 0;
+        if (!animationStates[key].running) {
+            toggleAnimation(key);
+        }
+    }
+
+    function setupCanvas(canvas) {
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        return { ctx, width: rect.width, height: rect.height };
+    }
+
+    // ==========================================
+    // ANIMATION 1: Cat tracking mouse in a circle
+    // ==========================================
+    function initCatMouse() {
+        const canvas = document.getElementById('catMouseCanvas');
+        let { ctx, width, height } = setupCanvas(canvas);
+
+        window.addEventListener('resize', () => {
+            const setup = setupCanvas(canvas);
+            ctx = setup.ctx; width = setup.width; height = setup.height;
+        });
+
+        function render() {
+            if (animationStates.catMouse.running) {
+                animationStates.catMouse.time += 0.02;
+            }
+            const t = animationStates.catMouse.time;
+
+            ctx.clearRect(0, 0, width, height);
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const orbitRadius = Math.min(width, height) * 0.32;
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, orbitRadius, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            const mouseX = centerX + Math.cos(t * 1.5) * orbitRadius;
+            const mouseY = centerY + Math.sin(t * 1.5) * orbitRadius;
+
+            for (let i = 1; i <= 5; i++) {
+                const pastT = t * 1.5 - i * 0.08;
+                const pX = centerX + Math.cos(pastT) * orbitRadius;
+                const pY = centerY + Math.sin(pastT) * orbitRadius;
+                ctx.fillStyle = `rgba(200, 200, 200, ${0.2 / i})`;
+                ctx.beginPath();
+                ctx.arc(pX, pY, 5 - i * 0.6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.save();
+            ctx.translate(mouseX, mouseY);
+            const mouseAngle = t * 1.5 + Math.PI / 2;
+            ctx.rotate(mouseAngle);
+            
+            ctx.fillStyle = '#9ca3af';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 8, 12, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#6b7280';
+            ctx.beginPath();
+            ctx.arc(-5, -6, 3, 0, Math.PI * 2);
+            ctx.arc(5, -6, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#9ca3af';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(0, 10);
+            ctx.quadraticCurveTo(10, 18, 5, 24);
+            ctx.stroke();
+            ctx.restore();
+
+            const angleToMouse = Math.atan2(mouseY - centerY, mouseX - centerX);
+
+            ctx.save();
+            ctx.translate(centerX, centerY);
+
+            ctx.fillStyle = '#f97316';
+            ctx.beginPath();
+            ctx.ellipse(0, 10, 26, 34, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#ea580c';
+            ctx.beginPath();
+            ctx.arc(-16, 25, 7, 0, Math.PI * 2);
+            ctx.arc(16, 25, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.rotate(angleToMouse + Math.PI / 2);
+
+            ctx.fillStyle = '#f97316';
+            ctx.beginPath();
+            ctx.arc(0, -5, 22, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(-18, -16);
+            ctx.lineTo(-24, -34);
+            ctx.lineTo(-8, -22);
+            ctx.closePath();
+            ctx.moveTo(18, -16);
+            ctx.lineTo(24, -34);
+            ctx.lineTo(8, -22);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = '#fed7aa';
+            ctx.beginPath();
+            ctx.moveTo(-16, -18);
+            ctx.lineTo(-20, -29);
+            ctx.lineTo(-9, -21);
+            ctx.closePath();
+            ctx.moveTo(16, -18);
+            ctx.lineTo(20, -29);
+            ctx.lineTo(9, -21);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = '#facc15';
+            ctx.beginPath();
+            ctx.arc(-8, -8, 4.5, 0, Math.PI * 2);
+            ctx.arc(8, -8, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#111827';
+            ctx.beginPath();
+            ctx.arc(-8, -8, 2, 0, Math.PI * 2);
+            ctx.arc(8, -8, 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#fda4af';
+            ctx.beginPath();
+            ctx.arc(0, -1, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(-4, 0); ctx.lineTo(-18, -2);
+            ctx.moveTo(-4, 2); ctx.lineTo(-18, 4);
+            ctx.moveTo(4, 0); ctx.lineTo(18, -2);
+            ctx.moveTo(4, 2); ctx.lineTo(18, 4);
+            ctx.stroke();
+
+            ctx.restore();
+
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+    }
+
+    // ==========================================
+    // ANIMATION 2: Car 360 Rotation with Shadow
+    // ==========================================
+    function initCar() {
+        const canvas = document.getElementById('carCanvas');
+        let { ctx, width, height } = setupCanvas(canvas);
+
+        window.addEventListener('resize', () => {
+            const setup = setupCanvas(canvas);
+            ctx = setup.ctx; width = setup.width; height = setup.height;
+        });
+
+        function render() {
+            if (animationStates.car.running) {
+                animationStates.car.time += 0.015;
+            }
+            const t = animationStates.car.time;
+
+            ctx.clearRect(0, 0, width, height);
+
+            const centerX = width / 2;
+            const centerY = height / 2 + 10;
+
+            ctx.save();
+            ctx.translate(centerX, centerY + 30);
+            ctx.scale(1, 0.35);
+            
+            ctx.strokeStyle = 'rgba(6, 182, 212, 0.15)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, 95, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.strokeStyle = 'rgba(6, 182, 212, 0.08)';
+            ctx.beginPath();
+            ctx.arc(0, 0, 65, 0, Math.PI * 2);
+            ctx.stroke();
+
+            const shadowScaleX = 0.9 + Math.sin(t * 4) * 0.05;
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 45 * shadowScaleX, 22, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            for (let i = 0; i < 6; i++) {
+                const trailAngle = t - i * 0.12;
+                const tx = centerX + Math.cos(trailAngle) * 75;
+                const ty = centerY + Math.sin(trailAngle) * 32;
+                ctx.fillStyle = `rgba(6, 182, 212, ${0.25 - i * 0.04})`;
+                ctx.beginPath();
+                ctx.arc(tx, ty + 25, 4 - i * 0.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            const radiusX = 75;
+            const radiusY = 28;
+            const carX = centerX + Math.cos(t) * radiusX;
+            const carY = centerY + Math.sin(t) * radiusY + 25;
+
+            const depthFactor = (Math.sin(t) + 1) / 2;
+            const scale = 0.8 + depthFactor * 0.35;
+
+            ctx.save();
+            ctx.translate(carX, carY);
+            ctx.scale(scale, scale);
+
+            if (Math.sin(t) > 0) {
+                ctx.shadowColor = '#22d3ee';
+                ctx.shadowBlur = 12;
+            }
+
+            ctx.fillStyle = '#06b6d4';
+            ctx.beginPath();
+            ctx.roundRect(-32, -16, 64, 30, [10, 14, 8, 8]);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath();
+            ctx.moveTo(-14, -16);
+            ctx.lineTo(12, -16);
+            ctx.lineTo(20, -5);
+            ctx.lineTo(-20, -5);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.roundRect(-22, 12, 10, 6, 2);
+            ctx.roundRect(12, 12, 10, 6, 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#67e8f9';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(-28, 4);
+            ctx.lineTo(28, 4);
+            ctx.stroke();
+
+            ctx.restore();
+
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+    }
+
+    // ==========================================
+    // ANIMATION 3: Dramatic Human Monologue (Waist-Up / No Leg)
+    // ==========================================
+    function initAI() {
+        const canvas = document.getElementById('aiCanvas');
+        let { ctx, width, height } = setupCanvas(canvas);
+
+        window.addEventListener('resize', () => {
+            const setup = setupCanvas(canvas);
+            ctx = setup.ctx; width = setup.width; height = setup.height;
+        });
+
+        const dialogue = [
+            { time: 0, text: "Look at me... Look at what remains." },
+            { time: 4, text: "They said my journey was over when the accident took my legs." },
+            { time: 8, text: "But my spirit? My voice? They cannot chain that!" },
+            { time: 12, text: "I stand taller seated than they ever will on two feet." }
+        ];
+
+        function render() {
+            if (animationStates.ai.running) {
+                animationStates.ai.time += 0.016;
+            }
+            const totalCycleTime = 16;
+            const currentTime = animationStates.ai.time % totalCycleTime;
+
+            ctx.clearRect(0, 0, width, height);
+
+            const centerX = width / 2;
+            const centerY = height / 2 - 15;
+
+            // Dramatic cinematic ambient lighting
+            const pulse = Math.sin(currentTime * 3) * 0.15 + 0.85;
+            const bgGradient = ctx.createRadialGradient(centerX, centerY, 10, centerX, centerY, width * 0.6);
+            bgGradient.addColorStop(0, `rgba(244, 63, 94, ${0.1 * pulse})`);
+            bgGradient.addColorStop(1, 'rgba(11, 15, 25, 0)');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, width, height);
+
+            // Seated Chair / Wheelchair backrest (legs cut off / out of frame below waist)
+            ctx.save();
+            ctx.translate(centerX, centerY + 65);
+            
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath();
+            ctx.roundRect(-36, -65, 72, 80, [14, 14, 6, 6]);
+            ctx.fill();
+
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.roundRect(-36, -65, 72, 80, [14, 14, 6, 6]);
+            ctx.stroke();
+
+            ctx.restore();
+
+            // Human Body (Waist Up)
+            const breathOffset = Math.sin(currentTime * 3) * 2;
+            const bodyY = centerY + 15 + breathOffset;
+
+            ctx.save();
+            ctx.translate(centerX, bodyY);
+
+            // Torso / Clothes (Jacket / Shirt)
+            ctx.fillStyle = '#334155'; // Dark coat/shirt
+            ctx.beginPath();
+            ctx.roundRect(-32, -30, 64, 75, [16, 16, 10, 10]);
+            ctx.fill();
+
+            // Inner collar & tie/scarf
+            ctx.fillStyle = '#cbd5e1';
+            ctx.beginPath();
+            ctx.moveTo(-10, -30);
+            ctx.lineTo(0, -15);
+            ctx.lineTo(10, -30);
+            ctx.closePath();
+            ctx.fill();
+
+            // Gesturing Arms
+            const gestureAngle = Math.sin(currentTime * 4) * 0.25;
+            
+            // Left Arm
+            ctx.save();
+            ctx.translate(-26, -10);
+            ctx.rotate(0.2 + gestureAngle);
+            ctx.fillStyle = '#475569';
+            ctx.beginPath();
+            ctx.roundRect(-8, 0, 14, 40, 6);
+            ctx.fill();
+            // Hand
+            ctx.fillStyle = '#fbcfe8';
+            ctx.beginPath();
+            ctx.arc(-1, 42, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // Right Arm (Expressive palm-up gesture)
+            ctx.save();
+            ctx.translate(26, -10);
+            ctx.rotate(-0.3 - gestureAngle);
+            ctx.fillStyle = '#475569';
+            ctx.beginPath();
+            ctx.roundRect(-6, 0, 14, 40, 6);
+            ctx.fill();
+            // Hand
+            ctx.fillStyle = '#fbcfe8';
+            ctx.beginPath();
+            ctx.arc(1, 42, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // Neck
+            ctx.fillStyle = '#fbcfe8';
+            ctx.fillRect(-7, -42, 14, 16);
+
+            // Head with emotional tilt
+            const headTilt = Math.sin(currentTime * 2) * 0.06;
+            ctx.translate(0, -42);
+            ctx.rotate(headTilt);
+
+            // Face / Head base
+            ctx.fillStyle = '#fbcfe8';
+            ctx.beginPath();
+            ctx.arc(0, -18, 22, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Hair
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(0, -22, 23, Math.PI, Math.PI * 2);
+            ctx.fill();
+
+            // Eyes (Intense emotional expression)
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(-7, -18, 2.5, 0, Math.PI * 2);
+            ctx.arc(7, -18, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Eyebrows (Dramatic furrow)
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(-11, -24); ctx.lineTo(-4, -22);
+            ctx.moveTo(4, -22); ctx.lineTo(11, -24);
+            ctx.stroke();
+
+            // Mouth (Speaking / Dramatic expression)
+            ctx.strokeStyle = '#991b1b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, -9, 5, 0, Math.PI);
+            ctx.stroke();
+
+            ctx.restore();
+
+            // Subtitle Dialogue Box
+            let currentSub = "";
+            for (let i = dialogue.length - 1; i >= 0; i--) {
+                if (currentTime >= dialogue[i].time) {
+                    currentSub = dialogue[i].text;
+                    break;
+                }
+            }
+
+            if (currentSub) {
+                ctx.save();
+                ctx.font = '500 13px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                
+                const textWidth = ctx.measureText(currentSub).width;
+                const boxWidth = textWidth + 32;
+                const boxHeight = 32;
+                const boxX = centerX - boxWidth / 2;
+                const boxY = height - 25;
+
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                ctx.strokeStyle = 'rgba(244, 63, 94, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.roundRect(boxX, boxY - boxHeight, boxWidth, boxHeight, 8);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#f3f4f6';
+                ctx.fillText(currentSub, centerX, boxY - 10);
+                ctx.restore();
+            }
+
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+    }
+
+    window.onload = function() {
+        initCatMouse();
+        initCar();
+        initAI();
+    };
+</script>
+</body>
+</html>
